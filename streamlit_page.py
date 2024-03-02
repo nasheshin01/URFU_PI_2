@@ -16,7 +16,7 @@ def load_image():
 
     if uploaded_file is None:
         return None
-    
+
     image_data = uploaded_file.getvalue()
     st.image(image_data)
     return Image.open(io.BytesIO(image_data))
@@ -27,11 +27,11 @@ def main():
         st.title(localizeconst.IMAGE_CLASSIFICATION_TITLE)
         img = load_image()
         labels_input = st.text_input(localizeconst.ENTER_CLASSES_INSTRUCTION)
-    
+
         run_button = st.button(localizeconst.LAUNCH_CLASSIFICATION)
         if not run_button:
             return
-        
+
         labels = labels_input.split(',')
         if len(labels) <= 0 or labels[0] == '':
             st.error(localizeconst.NO_CLASSES_ERROR)
