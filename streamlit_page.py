@@ -1,4 +1,5 @@
 import io
+import localizeconst
 import streamlit as st
 from PIL import Image
 from clip_classifier import ClipClassifier
@@ -11,39 +12,34 @@ def load_clip_classifier():
 
 def load_image():
     """Создание формы для загрузки изображения"""
-    # Форма для загрузки изображения средствами Streamlit
-    uploaded_file = st.file_uploader(
-        label='Выберите изображение для распознавания')
+    uploaded_file = st.file_uploader(label=localizeconst.CHOOSE_IMAGE)
     if uploaded_file is not None:
-        # Получение загруженного изображения
         image_data = uploaded_file.getvalue()
-        # Показ загруженного изображения на Web-странице средствами Streamlit
         st.image(image_data)
-        # Возврат изображения в формате PIL
         return Image.open(io.BytesIO(image_data))
     else:
         return None
 
 
 def main():
-    st.title('Классификация изображений')
+    st.title(localizeconst.IMAGE_CLASSIFICATION_TITLE)
     img = load_image()
-    labels_input = st.text_input('Впишите классы через запятую (на английском):')
+    labels_input = st.text_input(localizeconst.ENTER_CLASSES_INSTRUCTION)
     labels = labels_input.split(',')
-    run_button = st.button("Запустить классификацию")
+    run_button = st.button(localizeconst.LAUNCH_CLASSIFICATION)
     if run_button:
         if len(labels) <= 0 or labels[0] == '':
-            st.error("Не были прописаны классы для определения")
+            st.error(localizeconst.NO_CLASSES_ERROR)
             return
 
         if img is None:
-            st.error("Не было выбрано изображение")
+            st.error(localizeconst.NO_IMAGE_ERROR)
             return
 
         model = load_clip_classifier()
-        with st.spinner("waiting"):
+        with st.spinner(localizeconst.SPINNER_WAITING):
             label, score = model.predict(img, labels)
-        st.write(f'Класс: {label} с вероятностью {int(score * 100)}%')
+        st.write(localizeconst.CLASSIFICATION_RESULT_LABEL.format(label, int(score * 100)))
 
 
 if __name__ == "__main__":

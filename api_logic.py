@@ -1,3 +1,5 @@
+import localizeconst
+
 from fastapi import FastAPI
 from clip_classifier import ClipClassifier, ClipUrlDataTemplate
 
@@ -9,9 +11,10 @@ classifier = ClipClassifier()
 @app.get("/")
 def root():
     """Корневая страница API"""
-    return {"message": "Добро пожаловать! " +
-                       "Для использования классификатора изображений используйте запрос /predict " +
-                       "Чтобы получить документацию используйте запрос /docs "}
+    return {"message":
+            localizeconst.WELCOME_API_LABEL_PART1 +
+            localizeconst.WELCOME_API_LABEL_PART2 +
+            localizeconst.WELCOME_API_LABEL_PART3}
 
 
 @app.post("/predict/")
