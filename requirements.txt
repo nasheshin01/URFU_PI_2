@@ -1,0 +1,12 @@
+fastapi
+numpy
+pydantic
+requests
+torch
+transformers
+uvicorn
+httpx
+hypothesis
+pillow
+streamlit
+flake8
