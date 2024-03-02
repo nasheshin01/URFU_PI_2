@@ -13,32 +13,36 @@ def load_clip_classifier():
 def load_image():
     """Создание формы для загрузки изображения"""
     uploaded_file = st.file_uploader(label=localizeconst.CHOOSE_IMAGE)
-    if uploaded_file is not None:
-        image_data = uploaded_file.getvalue()
-        st.image(image_data)
-        return Image.open(io.BytesIO(image_data))
-    else:
+
+    if uploaded_file is None:
         return None
+    
+    image_data = uploaded_file.getvalue()
+    st.image(image_data)
+    return Image.open(io.BytesIO(image_data))
 
 
 def main():
     st.title(localizeconst.IMAGE_CLASSIFICATION_TITLE)
     img = load_image()
     labels_input = st.text_input(localizeconst.ENTER_CLASSES_INSTRUCTION)
-    labels = labels_input.split(',')
+   
     run_button = st.button(localizeconst.LAUNCH_CLASSIFICATION)
-    if run_button:
-        if len(labels) <= 0 or labels[0] == '':
-            st.error(localizeconst.NO_CLASSES_ERROR)
-            return
+    if not run_button:
+        return
+    
+    labels = labels_input.split(',')
+    if len(labels) <= 0 or labels[0] == '':
+        st.error(localizeconst.NO_CLASSES_ERROR)
+        return
 
-        if img is None:
-            st.error(localizeconst.NO_IMAGE_ERROR)
-            return
+    if img is None:
+        st.error(localizeconst.NO_IMAGE_ERROR)
+        return
 
-        model = load_clip_classifier()
-        with st.spinner(localizeconst.SPINNER_WAITING):
-            label, score = model.predict(img, labels)
+    model = load_clip_classifier()
+    with st.spinner(localizeconst.SPINNER_WAITING):
+        label, score = model.predict(img, labels)
         st.write(localizeconst.CLASSIFICATION_RESULT_LABEL.format(label, int(score * 100)))
 
 

@@ -1,3 +1,5 @@
+import localizeconst
+
 from fastapi.testclient import TestClient
 from api_logic import app
 
@@ -8,9 +10,10 @@ client = TestClient(app)
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Добро пожаловать! " +
-                               "Для использования классификатора изображений используйте запрос /predict " +
-                               "Чтобы получить документацию используйте запрос /docs "}
+    assert response.json() == {"message":
+                               localizeconst.WELCOME_API_LABEL_PART1 +
+                               localizeconst.WELCOME_API_LABEL_PART2 +
+                               localizeconst.WELCOME_API_LABEL_PART3}
 
 
 def test_predict():
