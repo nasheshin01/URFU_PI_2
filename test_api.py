@@ -1,15 +1,18 @@
 from fastapi.testclient import TestClient
 from api_logic import app
 
+
 client = TestClient(app)
+
 
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Добро пожаловать! " +
-                               "Для использования классификатора изображений используйте запрос /predict " + 
+                               "Для использования классификатора изображений используйте запрос /predict " +
                                "Чтобы получить документацию используйте запрос /docs "}
-    
+
+
 def test_predict():
     img_urls = [
         "http://images.cocodataset.org/val2017/000000039769.jpg",
@@ -29,13 +32,8 @@ def test_predict():
 
     for i, url in enumerate(img_urls):
         print(i)
-        response = client.post("/predict/",
-            json={
-                "image_url": url, 
-                "labels": request_labels
-                }
-        )
-        json_data = response.json() 
+        response = client.post("/predict/", json={"image_url": url, "labels": request_labels})
+        json_data = response.json()
 
         assert response.status_code == 200
         assert json_data['label'] == true_labels[i]

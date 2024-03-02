@@ -3,9 +3,11 @@ import streamlit as st
 from PIL import Image
 from clip_classifier import ClipClassifier
 
+
 @st.cache_data()
 def load_clip_classifier():
     return ClipClassifier()
+
 
 def load_image():
     """Создание формы для загрузки изображения"""
@@ -21,8 +23,9 @@ def load_image():
         return Image.open(io.BytesIO(image_data))
     else:
         return None
-    
-def main():    
+
+
+def main():
     st.title('Классификация изображений')
     img = load_image()
     labels_input = st.text_input('Впишите классы через запятую (на английском):')
@@ -32,7 +35,7 @@ def main():
         if len(labels) <= 0 or labels[0] == '':
             st.error("Не были прописаны классы для определения")
             return
-        
+
         if img is None:
             st.error("Не было выбрано изображение")
             return
@@ -42,8 +45,6 @@ def main():
             label, score = model.predict(img, labels)
         st.write(f'Класс: {label} с вероятностью {int(score * 100)}%')
 
+
 if __name__ == "__main__":
     main()
-
-    
-        

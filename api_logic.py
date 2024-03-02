@@ -5,12 +5,14 @@ from clip_classifier import ClipClassifier, ClipUrlDataTemplate
 app = FastAPI()
 classifier = ClipClassifier()
 
+
 @app.get("/")
 def root():
     """Корневая страница API"""
     return {"message": "Добро пожаловать! " +
-                       "Для использования классификатора изображений используйте запрос /predict " + 
+                       "Для использования классификатора изображений используйте запрос /predict " +
                        "Чтобы получить документацию используйте запрос /docs "}
+
 
 @app.post("/predict/")
 def predict(clip_data: ClipUrlDataTemplate):
